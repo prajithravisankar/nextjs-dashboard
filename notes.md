@@ -95,3 +95,26 @@ export default function InvoiceStatus({ status }: { status: string }) {
   - Next.js downloads font files at build time and hosts them with your other static assets. This means when a user visits your application, there are no additional network requests for fonts which would impact performance.
   - Next.js can serve static assets, like images, under the top-level /public folder. Files inside /public can be referenced in your application.
   - you can use the next/image component to automatically optimize your images.
+  - mobile version: ![img_2.png](img_2.png)
+  - desktop version: ![img_3.png](img_3.png)
+  - also the width and height attributes help prevent Cumulative Layout Shift by reserving the appropriate amount of space for the image before it loads.
+  - these width and height are not exact display sizes but rather the intrinsic dimensions of the image. The actual display size can be controlled using CSS or other layout techniques.
+```typescript jsx
+<div className="flex items-center justify-center p-6 md:w-3/5 md:px-28 md:py-12">
+    {/* Add Hero Images Here */}
+    <Image
+        src={"/hero-desktop.png"}
+        alt={"Screenshots of the dashboard project showing desktop version"}
+        width={1000}
+        height={760}
+        className={"hidden md:block"}
+    />
+    <Image
+        src={'/hero-mobile.png'}
+        alt={"Screenshots of the dashboard project showing mobile version"}
+        width={500}
+        height={620}
+        className={"block md:hidden"}
+    />
+</div>
+```
