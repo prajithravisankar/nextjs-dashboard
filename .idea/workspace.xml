@@ -6,11 +6,13 @@
   <component name="ChangeListManager">
     <list default="true" id="f9ee9877-af2c-4d46-b842-199c9bbdb327" name="Changes" comment="">
       <change afterPath="$PROJECT_DIR$/app/dashboard/customers/page.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/dashboard/invoice/page.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/dashboard/invoices/page.tsx" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/app/dashboard/page.tsx" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/img_4.png" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/img_5.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/lib/data.ts" beforeDir="false" afterPath="$PROJECT_DIR$/app/lib/data.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/ui/dashboard/latest-invoices.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/ui/dashboard/latest-invoices.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/notes.md" beforeDir="false" afterPath="$PROJECT_DIR$/notes.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -100,7 +102,7 @@
       <workItem from="1763663818250" duration="8000" />
       <workItem from="1763663840310" duration="587000" />
       <workItem from="1763664470338" duration="4860000" />
-      <workItem from="1763850837139" duration="2384000" />
+      <workItem from="1763850837139" duration="2744000" />
     </task>
     <servers />
   </component>
