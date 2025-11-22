@@ -20,6 +20,7 @@ export type User = {
 ```
 
 ## chapter 2: CSS styling
+
 - [global.css](./app/styles/global.css) : this file contains global styles that apply to the entire application
 - use this file to add CSS rules to all the routes in your application - such as CSS reset rules, site-wide styles for HTML elements like links, and more
 - You can import global.css in any component in your application, but it's usually good practice to add it to your top-level component. In Next.js, this is the root layout [layout.tsx](./app/layout.tsx).
@@ -82,3 +83,15 @@ export default function InvoiceStatus({ status }: { status: string }) {
     // ...
 )}
 ```
+
+## chapter 3: Optimizing fonts and images
+
+- why we need to optimze fonts and images?
+  - performance: optimized fonts and images load faster, improving page load times and overall user experience.
+  - SEO: search engines favor websites that load quickly, which can positively impact search rankings.
+  - user experience: optimized assets lead to a smoother and more enjoyable browsing experience for users.
+  - Cumulative Layout Shift is a metric used by Google to evaluate the performance and user experience of a website. With fonts, layout shift happens when the browser initially renders text in a fallback or system font and then swaps it out for a custom font once it has loaded. This swap can cause the text size, spacing, or layout to change, shifting elements around it.
+  - when a user visits your application, there are no additional network requests for fonts which would impact performance.
+  - Next.js downloads font files at build time and hosts them with your other static assets. This means when a user visits your application, there are no additional network requests for fonts which would impact performance.
+  - Next.js can serve static assets, like images, under the top-level /public folder. Files inside /public can be referenced in your application.
+  - you can use the next/image component to automatically optimize your images.
