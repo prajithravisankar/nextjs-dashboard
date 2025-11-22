@@ -119,3 +119,31 @@ export default function InvoiceStatus({ status }: { status: string }) {
 </div>
 ```
 
+## Chapter 4: Creating layouts and Pages. 
+- In Next.js, layouts are special components that define the structure and appearance of your pages. They allow you to create a consistent look and feel across multiple pages in your application.
+- Layouts are typically used to wrap around your page components, providing common elements like headers, footers, navigation menus, and sidebars.
+- In Next.js, you can create a layout by creating a file named layout.tsx in the directory where you want to apply the layout.
+- For example, if you want to create a layout for all pages under the /dashboard directory, you would create a file at /dashboard/layout.tsx.
+- Here's an example of a simple layout component: ![img_6.png](img_6.png)
+```typescript jsx
+import SideNav from '@/app/ui/dashboard/sidenav';
+ 
+export default function Layout({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="flex h-screen flex-col md:flex-row md:overflow-hidden">
+      <div className="w-full flex-none md:w-64">
+        <SideNav />
+      </div>
+      <div className="grow p-6 md:overflow-y-auto md:p-12">{children}</div>
+    </div>
+  );
+}
+```
+- In this example, the Layout component includes a SideNav component and a main content area where the children prop is rendered. The children prop represents the content of the specific page that uses this layout.
+- To use this layout for a specific page, you would create a page component in the same directory, for example, /dashboard/page.tsx:
+- A root layout is a special type of layout that applies to the entire application. In Next.js, you can create a root layout by creating a file named layout.tsx in the root of the /app directory. It is required in every Next.js application using the App Router.
+  - ours is located at [layout.tsx](./app/layout.tsx)
+- example of different pages inside app/dashboard: ![img_7.png](img_7.png)
+  - now we have access to these links: http://localhost:3000/dashboard, http://localhost:3000/dashboard/invoices, http://localhost:3000/dashboard/customers
+
+
