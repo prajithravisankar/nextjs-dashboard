@@ -162,3 +162,44 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 - Next.js automatically prefetches the code for the linked route in the background. By the time the user clicks the link, the code for the destination page will already be loaded in the background, and this is what makes the page transition near-instant!
 
 ## Chapter 6: Database setup
+- setup database
+
+## chapter 7: Fetching data
+- In which of these scenarios should you not query your database directly?
+  - When you're fetching data on the client: you should not query your database directly when fetching data on the client as this would expose your database secrets.
+- What's one advantage of using React Server Components to fetch data?
+  - They allow you to fetch data directly from your database without exposing your database secrets to the client.
+- In Next.js everything is server-side by default unless you explicitly mark the file with: "use client";
+  - By default → code runs on the server 
+  - If you write "use client" → code runs in the browser
+  - your database credentials stay hidden
+  - your logic stays private, users cannot inspect it, and you avoid shipping unnecessary JS to the browser
+  - You don’t need API routes for simple data fetching
+    - Old way (React): client → /api/route → database
+    - New way (Next.js): server component → database
+- **The browser does NOT run the code.**, The server runs the code, and sends the result to the browser.
+- Example workflow -> our code below runs on the server:
+```typescript jsx
+export default async function Dashboard() {
+  const invoices = await sql`SELECT * FROM invoices`;
+  return (
+    <div>
+      <h1>Invoices</h1>
+      {invoices.map(i => <p key={i.id}>{i.amount}</p>)}
+    </div>
+  );
+}
+```
+- browser receives this
+```html
+<div>
+  <h1>Invoices</h1>
+  <p>100</p>
+  <p>200</p>
+  <p>300</p>
+</div>
+
+```
+- __But what if I have interactivity (button clicks, etc.)?__
+  - In that case, you can use Client Components for the interactive parts of your application. Client Components run in the browser and can handle user interactions.
+  - You can combine Server Components and Client Components in your application. For example, you can fetch data in a Server Component and then pass that data to a Client Component for rendering and interactivity.
