@@ -203,3 +203,7 @@ export default async function Dashboard() {
 - __But what if I have interactivity (button clicks, etc.)?__
   - In that case, you can use Client Components for the interactive parts of your application. Client Components run in the browser and can handle user interactions.
   - You can combine Server Components and Client Components in your application. For example, you can fetch data in a Server Component and then pass that data to a Client Component for rendering and interactivity.
+  - check these three files to understand what is going on in this order: 
+    - in [page.tsx](app/dashboard/page.tsx) we are fetching data from database: `const revenue = await fetchRevenue();`. 
+    - next we go to [data.ts](app/lib/data.ts) where the fetchRevenue function is defined, this returns our data which we store above in the revenue variable.
+    - next we go to [revenue-chart.tsx](app/ui/dashboard/revenue-chart.tsx) because in [page.tsx](app/dashboard/page.tsx) we are calling the component `<RevenueSummary revenue={revenue} />` and passing the fetched data as a prop.
