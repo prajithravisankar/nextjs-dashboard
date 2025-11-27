@@ -207,3 +207,28 @@ export default async function Dashboard() {
     - in [page.tsx](app/dashboard/page.tsx) we are fetching data from database: `const revenue = await fetchRevenue();`. 
     - next we go to [data.ts](app/lib/data.ts) where the fetchRevenue function is defined, this returns our data which we store above in the revenue variable.
     - next we go to [revenue-chart.tsx](app/ui/dashboard/revenue-chart.tsx) because in [page.tsx](app/dashboard/page.tsx) we are calling the component `<RevenueSummary revenue={revenue} />` and passing the fetched data as a prop.
+- what is request waterfall? 
+  - A "waterfall" refers to a sequence of network requests that depend on the completion of previous requests. In the case of data fetching, each request can only begin once the previous request has returned data.
+  - This can lead to longer load times, as each request adds additional latency.![img_8.png](img_8.png)
+  - For example, we need to wait for fetchRevenue() to execute before fetchLatestInvoices() can start running, and so on.
+  - 
+```typescript jsx
+const revenue = await fetchRevenue();
+const latestInvoices = await fetchLatestInvoices(); // wait for fetchRevenue() to finish
+const {
+  numberOfInvoices,
+  numberOfCustomers,
+  totalPaidInvoices,
+  totalPendingInvoices,
+} = await fetchCardData(); // wait for fetchLatestInvoices() to finish
+``` 
+  - A common way to avoid waterfalls is to initiate all data requests at the same time - in parallel.
+  - Instead of waiting for each request to finish before starting the next one, you can start all requests simultaneously and then wait for all of them to complete.
+    - ```typescript jsx
+      const data = await Promise.all([
+      invoiceCountPromise,
+      customerCountPromise,
+      invoiceStatusPromise,
+      ]);```
+    - but there is one issue which is discussed in the next chapter. 
+
