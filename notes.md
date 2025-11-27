@@ -232,3 +232,11 @@ const {
       ]);```
     - but there is one issue which is discussed in the next chapter. 
 
+
+## chapter 8: Static and Dynamic Rendering
+- Static rendering is useful for UI with no data or data that is shared across users, such as a static blog post or a product page. It might not be a good fit for a dashboard that has personalized data which is regularly updated. 
+- When your data updates, you want to show the latest changes in your dashboard. Static Rendering is not a good fit for this use case.
+- Dynamic rendering is useful for UI that requires personalized data or frequently updated data, such as a user dashboard or real-time data feeds.
+- Dynamic rendering allows you to fetch the latest data on each request, ensuring that users always see the most up-to-date information. Content is rendered on the server for each user at request time (when the user visits the page).
+- With dynamic rendering, your application is only as fast as your slowest data fetch.
+
