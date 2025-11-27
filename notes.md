@@ -204,9 +204,9 @@ export default async function Dashboard() {
   - In that case, you can use Client Components for the interactive parts of your application. Client Components run in the browser and can handle user interactions.
   - You can combine Server Components and Client Components in your application. For example, you can fetch data in a Server Component and then pass that data to a Client Component for rendering and interactivity.
   - check these three files to understand what is going on in this order: 
-    - in [page.tsx](app/dashboard/page.tsx) we are fetching data from database: `const revenue = await fetchRevenue();`. 
+    - in [page.tsx](app/dashboard/(overview)/page.tsx) we are fetching data from database: `const revenue = await fetchRevenue();`. 
     - next we go to [data.ts](app/lib/data.ts) where the fetchRevenue function is defined, this returns our data which we store above in the revenue variable.
-    - next we go to [revenue-chart.tsx](app/ui/dashboard/revenue-chart.tsx) because in [page.tsx](app/dashboard/page.tsx) we are calling the component `<RevenueSummary revenue={revenue} />` and passing the fetched data as a prop.
+    - next we go to [revenue-chart.tsx](app/ui/dashboard/revenue-chart.tsx) because in [page.tsx](app/dashboard/(overview)/page.tsx) we are calling the component `<RevenueSummary revenue={revenue} />` and passing the fetched data as a prop.
 - what is request waterfall? 
   - A "waterfall" refers to a sequence of network requests that depend on the completion of previous requests. In the case of data fetching, each request can only begin once the previous request has returned data.
   - This can lead to longer load times, as each request adds additional latency.![img_8.png](img_8.png)
@@ -240,3 +240,25 @@ const {
 - Dynamic rendering allows you to fetch the latest data on each request, ensuring that users always see the most up-to-date information. Content is rendered on the server for each user at request time (when the user visits the page).
 - With dynamic rendering, your application is only as fast as your slowest data fetch.
 
+## chapter 9: streaming
+- Streaming is a data transfer technique that allows you to break down a route into smaller "chunks" and progressively stream them from the server to the client as they become ready.
+- There are two ways you implement streaming in Next.js:
+  - At the page level, with the loading.tsx file (which creates <Suspense> for you).
+  - At the component level, with <Suspense> for more granular control.
+- One advantage of this approach is that you can significantly reduce your page's overall loading time.
+- Instead of waiting for all data to be fetched and all components to be ready before sending anything to the client, you can start sending parts of the page as soon as they are ready.
+- This means that users can start seeing and interacting with parts of the page sooner, improving the perceived performance of your application.
+- Refer to [loading.tsx](app/dashboard/(overview)/loading.tsx) file for implementation of streaming at page level.
+  - loading.tsx is a special Next.js file built on top of React Suspense. It allows you to create fallback UI to show as a replacement while page content loads.
+  - Since <SideNav> is static, it's shown immediately. The user can interact with <SideNav> while the dynamic content is loading.
+  - The user doesn't have to wait for the page to finish loading before navigating away (this is called interruptable navigation).
+  - refer to [skeletons.tsx](app/ui/skeletons.tsx) to understand how we use loading effects along with loading.tsx. 
+- Right now, your loading skeleton will apply to the invoices. Since loading.tsx is a level higher than /invoices/page.tsx and /customers/page.tsx in the file system, it's also applied to those pages. We can change this with Route Groups. Create a new folder called /(overview) inside the dashboard folder. Then, move your loading.tsx and page.tsx files inside the folder:
+- app -> dashboard -> (overview) -> loading.tsx. Here we have created a route group called overview. Route groups allow you to organize your routes without affecting the URL structure of your application.
+- ![img_9.png](img_9.png), now loading.tsx will only apply to the overview pages. 
+- So far, you're streaming a whole page. But you can also be more granular and stream specific components using React Suspense.
+  - Suspense allows you to defer rendering parts of your application until some condition is met (e.g. data is loaded).
+  - wrap your dynamic components in Suspense. Then, pass it a fallback component to show while the dynamic component loads.
+  - slow data request from fetchRevenue() [data.ts](app/lib/data.ts) is the request that is slowing down the whole page. Instead of blocking your whole page, you can use Suspense to stream only this component and immediately show the rest of the page's UI.
+  - ![img_10.png](img_10.png), we can achieve this by moving data fetching to the component itself, and whenever we use the component in a page, wrap it in Suspense with a fallback. refer: [page.tsx](app/dashboard/(overview)/page.tsx). With this setup, only the RevenueSummary component will be delayed, while the rest of the page loads immediately.
+- By moving data fetching down to the components that need it, you can create more granular Suspense boundaries. This allows you to stream specific components and prevent the UI from blocking.
