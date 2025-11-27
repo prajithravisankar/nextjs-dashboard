@@ -256,3 +256,8 @@ const {
 - Right now, your loading skeleton will apply to the invoices. Since loading.tsx is a level higher than /invoices/page.tsx and /customers/page.tsx in the file system, it's also applied to those pages. We can change this with Route Groups. Create a new folder called /(overview) inside the dashboard folder. Then, move your loading.tsx and page.tsx files inside the folder:
 - app -> dashboard -> (overview) -> loading.tsx. Here we have created a route group called overview. Route groups allow you to organize your routes without affecting the URL structure of your application.
 - ![img_9.png](img_9.png), now loading.tsx will only apply to the overview pages. 
+- So far, you're streaming a whole page. But you can also be more granular and stream specific components using React Suspense.
+  - Suspense allows you to defer rendering parts of your application until some condition is met (e.g. data is loaded).
+  - wrap your dynamic components in Suspense. Then, pass it a fallback component to show while the dynamic component loads.
+  - slow data request from fetchRevenue() [data.ts](app/lib/data.ts) is the request that is slowing down the whole page. Instead of blocking your whole page, you can use Suspense to stream only this component and immediately show the rest of the page's UI.
+  - ![img_10.png](img_10.png), we can achieve this by moving data fetching to the component itself, and whenever we use the component in a page, wrap it in Suspense with a fallback. refer: [page.tsx](app/dashboard/(overview)/page.tsx). With this setup, only the RevenueSummary component will be delayed, while the rest of the page loads immediately.
