@@ -262,3 +262,10 @@ const {
   - slow data request from fetchRevenue() [data.ts](app/lib/data.ts) is the request that is slowing down the whole page. Instead of blocking your whole page, you can use Suspense to stream only this component and immediately show the rest of the page's UI.
   - ![img_10.png](img_10.png), we can achieve this by moving data fetching to the component itself, and whenever we use the component in a page, wrap it in Suspense with a fallback. refer: [page.tsx](app/dashboard/(overview)/page.tsx). With this setup, only the RevenueSummary component will be delayed, while the rest of the page loads immediately.
 - By moving data fetching down to the components that need it, you can create more granular Suspense boundaries. This allows you to stream specific components and prevent the UI from blocking.
+
+## chapter 10: Adding Search and Pagination
+- Search and pagination are common features in web applications that deal with large datasets. They help users find specific information quickly and navigate through large lists of items efficiently.
+- There are a couple of benefits of implementing search with URL params:
+  - Bookmarkable and shareable URLs: Storing search and filter state in the URL allows users to bookmark or share a link that restores the exact same results, filters, and pagination.
+  - Server-side rendering: URL params are visible to the server before rendering, allowing the backend to fetch filtered/paginated data and return a fully-rendered page without client-side loading.
+  - Analytics and tracking: Analytics tools automatically record full URLs, so storing search parameters in the URL makes user behavior (queries, filters, pages) trackable without extra client-side code.
