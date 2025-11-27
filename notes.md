@@ -204,9 +204,9 @@ export default async function Dashboard() {
   - In that case, you can use Client Components for the interactive parts of your application. Client Components run in the browser and can handle user interactions.
   - You can combine Server Components and Client Components in your application. For example, you can fetch data in a Server Component and then pass that data to a Client Component for rendering and interactivity.
   - check these three files to understand what is going on in this order: 
-    - in [page.tsx](app/dashboard/page.tsx) we are fetching data from database: `const revenue = await fetchRevenue();`. 
+    - in [page.tsx](app/dashboard/(overview)/page.tsx) we are fetching data from database: `const revenue = await fetchRevenue();`. 
     - next we go to [data.ts](app/lib/data.ts) where the fetchRevenue function is defined, this returns our data which we store above in the revenue variable.
-    - next we go to [revenue-chart.tsx](app/ui/dashboard/revenue-chart.tsx) because in [page.tsx](app/dashboard/page.tsx) we are calling the component `<RevenueSummary revenue={revenue} />` and passing the fetched data as a prop.
+    - next we go to [revenue-chart.tsx](app/ui/dashboard/revenue-chart.tsx) because in [page.tsx](app/dashboard/(overview)/page.tsx) we are calling the component `<RevenueSummary revenue={revenue} />` and passing the fetched data as a prop.
 - what is request waterfall? 
   - A "waterfall" refers to a sequence of network requests that depend on the completion of previous requests. In the case of data fetching, each request can only begin once the previous request has returned data.
   - This can lead to longer load times, as each request adds additional latency.![img_8.png](img_8.png)
@@ -248,8 +248,11 @@ const {
 - One advantage of this approach is that you can significantly reduce your page's overall loading time.
 - Instead of waiting for all data to be fetched and all components to be ready before sending anything to the client, you can start sending parts of the page as soon as they are ready.
 - This means that users can start seeing and interacting with parts of the page sooner, improving the perceived performance of your application.
-- Refer to [loading.tsx](./app/dashboard/loading.tsx) file for implementation of streaming at page level.
+- Refer to [loading.tsx](app/dashboard/(overview)/loading.tsx) file for implementation of streaming at page level.
   - loading.tsx is a special Next.js file built on top of React Suspense. It allows you to create fallback UI to show as a replacement while page content loads.
   - Since <SideNav> is static, it's shown immediately. The user can interact with <SideNav> while the dynamic content is loading.
   - The user doesn't have to wait for the page to finish loading before navigating away (this is called interruptable navigation).
   - refer to [skeletons.tsx](app/ui/skeletons.tsx) to understand how we use loading effects along with loading.tsx. 
+- Right now, your loading skeleton will apply to the invoices. Since loading.tsx is a level higher than /invoices/page.tsx and /customers/page.tsx in the file system, it's also applied to those pages. We can change this with Route Groups. Create a new folder called /(overview) inside the dashboard folder. Then, move your loading.tsx and page.tsx files inside the folder:
+- app -> dashboard -> (overview) -> loading.tsx. Here we have created a route group called overview. Route groups allow you to organize your routes without affecting the URL structure of your application.
+- ![img_9.png](img_9.png), now loading.tsx will only apply to the overview pages. 
