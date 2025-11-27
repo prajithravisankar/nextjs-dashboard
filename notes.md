@@ -240,3 +240,16 @@ const {
 - Dynamic rendering allows you to fetch the latest data on each request, ensuring that users always see the most up-to-date information. Content is rendered on the server for each user at request time (when the user visits the page).
 - With dynamic rendering, your application is only as fast as your slowest data fetch.
 
+## chapter 9: streaming
+- Streaming is a data transfer technique that allows you to break down a route into smaller "chunks" and progressively stream them from the server to the client as they become ready.
+- There are two ways you implement streaming in Next.js:
+  - At the page level, with the loading.tsx file (which creates <Suspense> for you).
+  - At the component level, with <Suspense> for more granular control.
+- One advantage of this approach is that you can significantly reduce your page's overall loading time.
+- Instead of waiting for all data to be fetched and all components to be ready before sending anything to the client, you can start sending parts of the page as soon as they are ready.
+- This means that users can start seeing and interacting with parts of the page sooner, improving the perceived performance of your application.
+- Refer to [loading.tsx](./app/dashboard/loading.tsx) file for implementation of streaming at page level.
+  - loading.tsx is a special Next.js file built on top of React Suspense. It allows you to create fallback UI to show as a replacement while page content loads.
+  - Since <SideNav> is static, it's shown immediately. The user can interact with <SideNav> while the dynamic content is loading.
+  - The user doesn't have to wait for the page to finish loading before navigating away (this is called interruptable navigation).
+  - refer to [skeletons.tsx](app/ui/skeletons.tsx) to understand how we use loading effects along with loading.tsx. 
