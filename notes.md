@@ -162,3 +162,73 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 - Next.js automatically prefetches the code for the linked route in the background. By the time the user clicks the link, the code for the destination page will already be loaded in the background, and this is what makes the page transition near-instant!
 
 ## Chapter 6: Database setup
+- setup database
+
+## chapter 7: Fetching data
+- In which of these scenarios should you not query your database directly?
+  - When you're fetching data on the client: you should not query your database directly when fetching data on the client as this would expose your database secrets.
+- What's one advantage of using React Server Components to fetch data?
+  - They allow you to fetch data directly from your database without exposing your database secrets to the client.
+- In Next.js everything is server-side by default unless you explicitly mark the file with: "use client";
+  - By default → code runs on the server 
+  - If you write "use client" → code runs in the browser
+  - your database credentials stay hidden
+  - your logic stays private, users cannot inspect it, and you avoid shipping unnecessary JS to the browser
+  - You don’t need API routes for simple data fetching
+    - Old way (React): client → /api/route → database
+    - New way (Next.js): server component → database
+- **The browser does NOT run the code.**, The server runs the code, and sends the result to the browser.
+- Example workflow -> our code below runs on the server:
+```typescript jsx
+export default async function Dashboard() {
+  const invoices = await sql`SELECT * FROM invoices`;
+  return (
+    <div>
+      <h1>Invoices</h1>
+      {invoices.map(i => <p key={i.id}>{i.amount}</p>)}
+    </div>
+  );
+}
+```
+- browser receives this
+```html
+<div>
+  <h1>Invoices</h1>
+  <p>100</p>
+  <p>200</p>
+  <p>300</p>
+</div>
+
+```
+- __But what if I have interactivity (button clicks, etc.)?__
+  - In that case, you can use Client Components for the interactive parts of your application. Client Components run in the browser and can handle user interactions.
+  - You can combine Server Components and Client Components in your application. For example, you can fetch data in a Server Component and then pass that data to a Client Component for rendering and interactivity.
+  - check these three files to understand what is going on in this order: 
+    - in [page.tsx](app/dashboard/page.tsx) we are fetching data from database: `const revenue = await fetchRevenue();`. 
+    - next we go to [data.ts](app/lib/data.ts) where the fetchRevenue function is defined, this returns our data which we store above in the revenue variable.
+    - next we go to [revenue-chart.tsx](app/ui/dashboard/revenue-chart.tsx) because in [page.tsx](app/dashboard/page.tsx) we are calling the component `<RevenueSummary revenue={revenue} />` and passing the fetched data as a prop.
+- what is request waterfall? 
+  - A "waterfall" refers to a sequence of network requests that depend on the completion of previous requests. In the case of data fetching, each request can only begin once the previous request has returned data.
+  - This can lead to longer load times, as each request adds additional latency.![img_8.png](img_8.png)
+  - For example, we need to wait for fetchRevenue() to execute before fetchLatestInvoices() can start running, and so on.
+  - 
+```typescript jsx
+const revenue = await fetchRevenue();
+const latestInvoices = await fetchLatestInvoices(); // wait for fetchRevenue() to finish
+const {
+  numberOfInvoices,
+  numberOfCustomers,
+  totalPaidInvoices,
+  totalPendingInvoices,
+} = await fetchCardData(); // wait for fetchLatestInvoices() to finish
+``` 
+  - A common way to avoid waterfalls is to initiate all data requests at the same time - in parallel.
+  - Instead of waiting for each request to finish before starting the next one, you can start all requests simultaneously and then wait for all of them to complete.
+    - ```typescript jsx
+      const data = await Promise.all([
+      invoiceCountPromise,
+      customerCountPromise,
+      invoiceStatusPromise,
+      ]);```
+    - but there is one issue which is discussed in the next chapter. 
+
