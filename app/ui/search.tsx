@@ -18,6 +18,7 @@ export default function Search({ placeholder }: { placeholder: string }) {
         //
         // If they clear the input ("")
         // → remove ?query completely
+        params.set('page', '1'); // reset to page 1 on new search
         if (term) {
             params.set('query', term);
         } else {

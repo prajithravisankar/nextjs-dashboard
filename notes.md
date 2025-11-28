@@ -304,3 +304,8 @@ const {
       Execution: If the timer reaches the end of its countdown, the debounced function is executed.
   - refer [search.tsx](app/ui/search.tsx), to see how we used debounce. 
   - By debouncing, you can reduce the number of requests sent to your database, thus saving resources.
+- Pagination:
+  - refer [pagination.tsx](app/ui/invoices/pagination.tsx)
+    - createPageURL creates an instance of the current search parameters.
+    - Then, it updates the "page" parameter to the provided page number.
+    - Finally, it constructs the full URL using the pathname and updated search parameters.
