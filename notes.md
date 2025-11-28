@@ -296,3 +296,11 @@ const {
 - Updating the table: 
   - when something returns promise, we need to use await to get the actual data out of the promise.
   - refer [page.tsx](app/dashboard/invoices/page.tsx) inside invoices folder for implementation of updating the table based on search input.
+- What is debouncing?
+  - Debouncing is a programming practice that limits the rate at which a function can fire. In our case, you only want to query the database when the user has stopped typing.
+  - Without debouncing, every keystroke would trigger a new database query, which can be inefficient and lead to performance issues.
+    - Trigger Event: When an event that should be debounced (like a keystroke in the search box) occurs, a timer starts.
+      Wait: If a new event occurs before the timer expires, the timer is reset.
+      Execution: If the timer reaches the end of its countdown, the debounced function is executed.
+  - refer [search.tsx](app/ui/search.tsx), to see how we used debounce. 
+  - By debouncing, you can reduce the number of requests sent to your database, thus saving resources.

@@ -2,6 +2,7 @@
 
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import {usePathname, useSearchParams, useRouter} from "next/navigation";
+import { useDebouncedCallback} from "use-debounce";
 
 export default function Search({ placeholder }: { placeholder: string }) {
     // the object returned by useSearchParams is immutable, so we need to create a new instance of URLSearchParams to modify it
@@ -9,7 +10,8 @@ export default function Search({ placeholder }: { placeholder: string }) {
     const pathname = usePathname();
     const { replace } = useRouter();
 
-    function handleSearch(term: string) {
+    const handleSearch = useDebouncedCallback((term) => {
+        console.log(`searching...  ${term}`);
         const params = new URLSearchParams(searchParams);
         // If the user types "apple", then term = apple
         // → ?query=apple
@@ -22,7 +24,7 @@ export default function Search({ placeholder }: { placeholder: string }) {
             params.delete('query');
         }
         replace(`${pathname}?${params.toString()}`);
-    }
+    }, 800);
 
 
   return (
