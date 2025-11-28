@@ -262,3 +262,50 @@ const {
   - slow data request from fetchRevenue() [data.ts](app/lib/data.ts) is the request that is slowing down the whole page. Instead of blocking your whole page, you can use Suspense to stream only this component and immediately show the rest of the page's UI.
   - ![img_10.png](img_10.png), we can achieve this by moving data fetching to the component itself, and whenever we use the component in a page, wrap it in Suspense with a fallback. refer: [page.tsx](app/dashboard/(overview)/page.tsx). With this setup, only the RevenueSummary component will be delayed, while the rest of the page loads immediately.
 - By moving data fetching down to the components that need it, you can create more granular Suspense boundaries. This allows you to stream specific components and prevent the UI from blocking.
+
+## chapter 10: Adding Search and Pagination
+- Search and pagination are common features in web applications that deal with large datasets. They help users find specific information quickly and navigate through large lists of items efficiently.
+- There are a couple of benefits of implementing search with URL params:
+  - Bookmarkable and shareable URLs: Storing search and filter state in the URL allows users to bookmark or share a link that restores the exact same results, filters, and pagination.
+  - Server-side rendering: URL params are visible to the server before rendering, allowing the backend to fetch filtered/paginated data and return a fully-rendered page without client-side loading.
+  - Analytics and tracking: Analytics tools automatically record full URLs, so storing search parameters in the URL makes user behavior (queries, filters, pages) trackable without extra client-side code.
+- Adding the search functionality:
+  - useSearchParams- Allows you to access the parameters of the current URL. This is useful for reading query parameters, such as search terms or filters, from the URL.
+    - for example: `/dashboard/invoices?page=1&query=pending` would look like this: `{page: '1', query: 'pending'}`
+    - useSearchParams() gives you the current URL query parameters. 
+      - `/dashboard/products?page=2&query=apple `
+      - `useSearchParams()` returns an object similar to: { page: "2", query: "apple" }
+  - usePathname - Lets you read the current URL's pathname. For example, for the route /dashboard/invoices, usePathname would return '/dashboard/invoices'.
+  - useRouter - Enables navigation between routes within client components
+- refer [search.tsx](app/ui/search.tsx) for implementation of search functionality.
+  - ![img_11.png](img_11.png)
+- Why create new URLSearchParams(searchParams)?
+  - Because the object returned by useSearchParams() is read-only. You cannot .set() or .delete() on it.
+  - To modify the search parameters, you need to create a new instance of URLSearchParams, which is mutable. This allows you to add, update, or remove query parameters as needed before constructing the new URL for navigation.
+- Now that you have the query string. You can use Next.js's useRouter and usePathname hooks to update the URL. 
+  - replace(`${pathname}?${params.toString()}`);
+  - ${pathname} is the current path, in your case, "/dashboard/invoices"
+  - As the user types into the search bar, params.toString() translates this input into a URL-friendly format.
+  - replace(${pathname}?${params.toString()}) updates the URL with the user's search data. For example, /dashboard/invoices?query=lee if the user searches for "Lee".
+  - The URL is updated without reloading the page, thanks to Next.js's client-side navigation
+- Keeping the url and input in sync:
+  - This line: `defaultValue={searchParams.get('query')?.toString()}` means When the page loads, set the input box’s initial value based on the URL’s ?query= parameter.
+  - if someone opens: `/dashboard/products?query=apple`, the input box will show "apple" right away.
+- before typing in the search box: ![img_12.png](img_12.png)
+- after typing in the search box: ![img_13.png](img_13.png)
+- Updating the table: 
+  - when something returns promise, we need to use await to get the actual data out of the promise.
+  - refer [page.tsx](app/dashboard/invoices/page.tsx) inside invoices folder for implementation of updating the table based on search input.
+- What is debouncing?
+  - Debouncing is a programming practice that limits the rate at which a function can fire. In our case, you only want to query the database when the user has stopped typing.
+  - Without debouncing, every keystroke would trigger a new database query, which can be inefficient and lead to performance issues.
+    - Trigger Event: When an event that should be debounced (like a keystroke in the search box) occurs, a timer starts.
+      Wait: If a new event occurs before the timer expires, the timer is reset.
+      Execution: If the timer reaches the end of its countdown, the debounced function is executed.
+  - refer [search.tsx](app/ui/search.tsx), to see how we used debounce. 
+  - By debouncing, you can reduce the number of requests sent to your database, thus saving resources.
+- Pagination:
+  - refer [pagination.tsx](app/ui/invoices/pagination.tsx)
+    - createPageURL creates an instance of the current search parameters.
+    - Then, it updates the "page" parameter to the provided page number.
+    - Finally, it constructs the full URL using the pathname and updated search parameters.
