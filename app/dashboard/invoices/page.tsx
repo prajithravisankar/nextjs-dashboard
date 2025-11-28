@@ -16,7 +16,7 @@ export default async function Page(props: {
     const searchParams = await props.searchParams; // here we use await because searchParams is a promise
     // whenever we have promise in props, we need to await it
     const query = searchParams?.query || '';
-    const currentPage = Number(searchParams?.page) || 1;
+    const currentPage = Number(searchParams?.page) || 1; // here is where we get the current page from the search params
     // fetchInvoicesPages returns the total number of pages based on the search query.
     // For example, if there are 12 invoices that match the search query, and each page displays 6 invoices, then the total number of pages would be 2.
     const totalPages = await fetchInvoicesPages(query);
