@@ -288,3 +288,11 @@ const {
   - As the user types into the search bar, params.toString() translates this input into a URL-friendly format.
   - replace(${pathname}?${params.toString()}) updates the URL with the user's search data. For example, /dashboard/invoices?query=lee if the user searches for "Lee".
   - The URL is updated without reloading the page, thanks to Next.js's client-side navigation
+- Keeping the url and input in sync:
+  - This line: `defaultValue={searchParams.get('query')?.toString()}` means When the page loads, set the input box’s initial value based on the URL’s ?query= parameter.
+  - if someone opens: `/dashboard/products?query=apple`, the input box will show "apple" right away.
+- before typing in the search box: ![img_12.png](img_12.png)
+- after typing in the search box: ![img_13.png](img_13.png)
+- Updating the table: 
+  - when something returns promise, we need to use await to get the actual data out of the promise.
+  - refer [page.tsx](app/dashboard/invoices/page.tsx) inside invoices folder for implementation of updating the table based on search input.

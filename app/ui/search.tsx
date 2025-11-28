@@ -1,8 +1,7 @@
 'use client'; // this is a client component which means we can use hooks and interactivity
 
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
-import {usePathname, useSearchParams} from "next/navigation";
-import {useRouter} from "next/router";
+import {usePathname, useSearchParams, useRouter} from "next/navigation";
 
 export default function Search({ placeholder }: { placeholder: string }) {
     // the object returned by useSearchParams is immutable, so we need to create a new instance of URLSearchParams to modify it
@@ -37,6 +36,7 @@ export default function Search({ placeholder }: { placeholder: string }) {
         onChange={(e) => {
             handleSearch(e.target.value);
         }}
+        defaultValue={searchParams.get('query')?.toString()}
       />
       <MagnifyingGlassIcon className="absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
     </div>
