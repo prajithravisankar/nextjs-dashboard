@@ -363,3 +363,11 @@ export async function createInvoice(formData) {
   - we are using a library called Zod for data validation and parsing.
   - Zod allows you to define schemas for your data, which specify the expected structure and types of the data.
   - refer [actions.ts](app/lib/actions.ts)
+- Updating an invoice: 
+  - Next.js allows you to create Dynamic Route Segments when you don't know the exact segment name and want to create routes based on data.
+  - This could be blog post titles, product pages, etc. 
+  - You can create dynamic route segments by wrapping a folder's name in square brackets. For example, [id], [post] or [slug].
+  - from: ![img_17.png](img_17.png)
+  - to: ![img_18.png](img_18.png)
+  - notice how it is pre-populated with existing invoice data. Refer [page.tsx](app/dashboard/invoices/[id]/edit/page.tsx) and all the components used inside it.
+  - 
