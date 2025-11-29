@@ -309,3 +309,57 @@ const {
     - createPageURL creates an instance of the current search parameters.
     - Then, it updates the "page" parameter to the provided page number.
     - Finally, it constructs the full URL using the pathname and updated search parameters.
+
+## chapter 11: Mutating Data
+
+- Server Actions:
+  - Before Server Actions, how did we mutate data? 
+    - You had to make API routes (POST /api/update-user) 
+    - Then from your component you call fetch('/api/...')
+    - Then the API route talks to DB 
+    - Then it returns a response 
+    - Then you update the UI
+  - Server Actions remove the need for API routes.
+    - You write a normal async function in your code, mark it as use server, and Next.js runs it only on the server.
+- A Server Action is a function that you write in your code, marked with "use server", that runs on the server when the client calls it.
+```typescript jsx
+"use server";
+
+export async function createInvoice(formData) {
+  // This code runs on the server, NOT in the browser
+  await db.insert(...)
+}
+```
+```typescript jsx
+<form action={createInvoice}>
+  ...
+</form>
+```
+- No API routes needed, no fetch calls from the client. Just call the function directly from your component.
+- Also server actions are secure by default. Since they run on the server, your database credentials and logic stay hidden from the client.
+  - Next.js automatically handles the security of Server Actions. 
+- Why are Server Actions useful in Next.js?
+  - Because Next.js already separates components into: Server and Client Components.
+  - Server Actions let these two sides talk directly, without API routes.
+    - It’s like giving Server Components and Client Components a “phone line” to talk to the server.
+  - Server Actions allow Server Components to mutate data without needing API routes.
+- How are the referenced functions safe to use in the browser?
+  - Because Next.js only includes the function code in the browser if it’s used in a Client Component.
+  - If a Server Action is only used in Server Components, its code never gets sent to the browser.
+  - You do not send the actual function to the browser. Instead Next.js generates a secure reference (like a token) that the browser can use to call the function on the server.
+- Using forms with server actions:
+  - In Next.js, when you use a form with a Server Action, the form data is automatically serialized and sent to the server when the form is submitted.
+  - You don't need to manually handle the serialization or make a fetch request. Next.js takes care of this for you.
+  - When the user submits the form, Next.js captures the form data, serializes it, and sends it to the server where the Server Action function is executed with the form data as its argument.
+  - An advantage of invoking a Server Action within a Server Component is progressive enhancement
+  - Progressive enhancement means that your application can still function even if JavaScript is disabled in the user's browser.
+  - Since the form submission is handled by the server, users can submit the form and have their data processed even if they don't have JavaScript enabled.
+  - refer [actions.ts](app/lib/actions.ts), and [create-form.tsx](app/ui/invoices/create-form.tsx)
+  - ![img_14.png](img_14.png)
+  - ![img_15.png](img_15.png)
+  - ![img_16.png](img_16.png)
+  - the output won't be visible in the browser console. You have to check the terminal where your Next.js server is running to see the console.log output from the server action.
+- Validating and preparing the data: 
+  - we are using a library called Zod for data validation and parsing.
+  - Zod allows you to define schemas for your data, which specify the expected structure and types of the data.
+  - refer [actions.ts](app/lib/actions.ts)
