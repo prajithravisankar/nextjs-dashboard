@@ -389,3 +389,34 @@ export async function createInvoice(formData) {
   - now it is better: 
     - ![img_21.png](img_21.png)
 
+## chapter 13: Improving Accessibility
+- Next.js's ESLint configuration includes the eslint-plugin-jsx-a11y plugin, which helps catch accessibility issues early. For example, this plugin warns if you have images without alt text, use the aria-* and role attributes incorrectly, and more.
+- refer: [eslint.config.mjs](eslint.config.mjs), This configuration uses eslint-config-next/core-web-vitals, which includes the eslint-plugin-jsx-a11y plugin for catching accessibility issues.
+- we have added lint script in package.json to run the linter manually:
+  - if we have no linting errors, we will see: ![img_22.png](img_22.png)
+  - let's say if we remove alt from an image component, 
+    - ```typescript jsx
+        <Image
+            src={invoice.image_url}
+            className="rounded-full"
+            width={28}
+            height={28}
+            // alt={`${invoice.name}'s profile picture`}
+        />
+        ```
+    - then we will see this linting error: ![img_23.png](img_23.png)
+- what is linting? 
+  - linting in nextjs means analyzing your code for potential errors, stylistic issues, and adherence to coding standards using a tool called a linter.
+  - A linter scans your codebase and identifies issues such as syntax errors, unused variables, inconsistent formatting, and potential bugs.
+  - By running a linter, you can catch these issues early in the development process, before they cause problems in your application.
+- if we submit an empty form we get an error. 
+  - we can resolve this by adding form validation
+  - On the client side: The simplest would be to rely on the form validation provided by the browser by adding the required attribute to the <input> and <select> ![img_24.png](img_24.png)
+  - On the server side: By validating the data on the server we can, 
+    - Ensure your data is in the expected format before sending it to your database.
+    - Reduce the risk of malicious users bypassing client-side validation.
+    - Have one source of truth for what is considered valid data.
+    - refer: [create-form.tsx](app/ui/invoices/create-form.tsx) on how we use useActionState to show validation errors.
+    - refer: [actions.ts](app/lib/actions.ts), on how we use Zod to validate data on server side, refer `FormSchema`.
+    - ![img_25.png](img_25.png)
+    - same for `edit-form.tsx`, refer `actions.ts`. 
