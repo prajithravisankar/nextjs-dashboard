@@ -420,3 +420,22 @@ export async function createInvoice(formData) {
     - refer: [actions.ts](app/lib/actions.ts), on how we use Zod to validate data on server side, refer `FormSchema`.
     - ![img_25.png](img_25.png)
     - same for `edit-form.tsx`, refer `actions.ts`. 
+
+## chapter 14: Adding Authentication
+- Authentication is a key part of many web applications today. It's how a system checks if the user is who they say they are.
+- Authentication vs autherization:
+  - Authentication is about making sure the user is who they say they are. You're proving your identity with something you have like a username and password.
+  - Authorization is the next step. Once a user's identity is confirmed, authorization decides what parts of the application they are allowed to use.
+- refer [page.tsx](app/login/page.tsx)
+- We are going to use NextAuth.js for authentication in our Next.js application.
+- NextAuth.js is a popular authentication library specifically designed for Next.js applications. It provides a simple and flexible way to add authentication to your app, supporting various authentication providers like Google, GitHub, and more.
+- generate a random secret key for NextAuth.js
+  - run this command in terminal: `openssl rand -base64 32`
+- For auth to work in production, you'll need to update your environment variables in your Vercel project too. [check this documentation](https://vercel.com/docs/environment-variables/managing-environment-variables)
+- checkout [auth.config.ts](auth.config.ts): This will prevent users from accessing the dashboard pages unless they are logged in.
+  - The authorized callback is called before rendering any page in the /dashboard route, used to verify if the request is authorized to access a page with Next.js Proxy. It is called before a request is completed, and it receives an object with the auth and request properties. The auth property contains the user's session, and the request property contains the incoming request.
+- refer [proxy.ts](proxy.ts): Here you're initializing NextAuth.js with the authConfig object and exporting the auth property. You're also using the matcher option from Proxy to specify that it should run on specific paths.
+- The advantage of employing Proxy for this task is that the protected routes will not even start rendering until the Proxy verifies the authentication, enhancing both the security and performance of your application.
+- password hashing: 
+  - refer: [auth.ts](auth.ts)
+  - 
