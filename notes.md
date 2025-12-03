@@ -370,4 +370,22 @@ export async function createInvoice(formData) {
   - from: ![img_17.png](img_17.png)
   - to: ![img_18.png](img_18.png)
   - notice how it is pre-populated with existing invoice data. Refer [page.tsx](app/dashboard/invoices/[id]/edit/page.tsx) and all the components used inside it.
-  - 
+
+
+## chapter 12: Handling Errors
+- Check out the newly added try catch block in [actions.ts](app/lib/actions.ts). This will handle errors that occur during the creation, and updating of invoices.
+- How do we handle errors in server actions? ![img_19.png](img_19.png)
+  - I created this error manually to show how we can use error.tsx. 
+  - The [error.tsx](app/dashboard/invoices/error.tsx) file can be used to define a UI boundary for a route segment. It serves as a catch-all for unexpected errors and allows you to display a fallback UI to your users.
+    - It accepts two props:
+      - error: This object is an instance of JavaScript's native Error object.
+      - reset: This is a function that can be called to reset the error boundary and attempt to re-render the component tree.
+      - after including error.tsx: ![img_20.png](img_20.png)
+- Handling 404 errors with notFound function: 
+  - for example if we try to visit this page: For example, visit http://localhost:3000/dashboard/invoices/2e94d1ed-d220-449f-9f11-f0bbceed9645/edit, where this route is not present in our database, we will see the output of error.tsx. 
+  - But, what if we want to show a 404 page instead of a generic error message when an invoice is not found?
+  - Next.js provides a built-in notFound function that you can use to handle 404
+  - refer [page.tsx](app/dashboard/invoices/[id]/edit/page.tsx), and [not-found.tsx](app/dashboard/invoices/[id]/edit/not-found.tsx)
+  - now it is better: 
+    - ![img_21.png](img_21.png)
+
