@@ -438,4 +438,12 @@ export async function createInvoice(formData) {
 - The advantage of employing Proxy for this task is that the protected routes will not even start rendering until the Proxy verifies the authentication, enhancing both the security and performance of your application.
 - password hashing: 
   - refer: [auth.ts](auth.ts)
-  - 
+
+## chapter 15: Adding Metadata
+- Metadata is crucial for SEO and shareability
+- In web development, metadata provides additional details about a webpage. Metadata is not visible to the users visiting the page. Instead, it works behind the scenes, embedded within the page's HTML, usually within the <head> element. This hidden information is crucial for search engines and other systems that need to understand your webpage's content better.
+- Metadata plays a significant role in enhancing a webpage's SEO, making it more accessible and understandable for search engines and social media platforms. Proper metadata helps search engines effectively index webpages, improving their ranking in search results. Additionally, metadata like Open Graph improves the appearance of shared links on social media, making the content more appealing and informative for users.
+- Next.js has a Metadata API that can be used to define your application metadata. There are two ways you can add metadata to your application:
+  - Config-based: Export a static metadata object or a dynamic generateMetadata function in a layout.js or page.js file.
+  - File-based: Next.js has a range of special files that are specifically used for metadata purposes:
+- 
