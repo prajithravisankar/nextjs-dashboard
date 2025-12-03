@@ -436,3 +436,6 @@ export async function createInvoice(formData) {
   - The authorized callback is called before rendering any page in the /dashboard route, used to verify if the request is authorized to access a page with Next.js Proxy. It is called before a request is completed, and it receives an object with the auth and request properties. The auth property contains the user's session, and the request property contains the incoming request.
 - refer [proxy.ts](proxy.ts): Here you're initializing NextAuth.js with the authConfig object and exporting the auth property. You're also using the matcher option from Proxy to specify that it should run on specific paths.
 - The advantage of employing Proxy for this task is that the protected routes will not even start rendering until the Proxy verifies the authentication, enhancing both the security and performance of your application.
+- password hashing: 
+  - refer: [auth.ts](auth.ts)
+  - 
