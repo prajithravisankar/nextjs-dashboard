@@ -381,3 +381,11 @@ export async function createInvoice(formData) {
       - error: This object is an instance of JavaScript's native Error object.
       - reset: This is a function that can be called to reset the error boundary and attempt to re-render the component tree.
       - after including error.tsx: ![img_20.png](img_20.png)
+- Handling 404 errors with notFound function: 
+  - for example if we try to visit this page: For example, visit http://localhost:3000/dashboard/invoices/2e94d1ed-d220-449f-9f11-f0bbceed9645/edit, where this route is not present in our database, we will see the output of error.tsx. 
+  - But, what if we want to show a 404 page instead of a generic error message when an invoice is not found?
+  - Next.js provides a built-in notFound function that you can use to handle 404
+  - refer [page.tsx](app/dashboard/invoices/[id]/edit/page.tsx), and [not-found.tsx](app/dashboard/invoices/[id]/edit/not-found.tsx)
+  - now it is better: 
+    - ![img_21.png](img_21.png)
+
