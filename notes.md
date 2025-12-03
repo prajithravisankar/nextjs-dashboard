@@ -376,3 +376,8 @@ export async function createInvoice(formData) {
 - Check out the newly added try catch block in [actions.ts](app/lib/actions.ts). This will handle errors that occur during the creation, and updating of invoices.
 - How do we handle errors in server actions? ![img_19.png](img_19.png)
   - I created this error manually to show how we can use error.tsx. 
+  - The [error.tsx](app/dashboard/invoices/error.tsx) file can be used to define a UI boundary for a route segment. It serves as a catch-all for unexpected errors and allows you to display a fallback UI to your users.
+    - It accepts two props:
+      - error: This object is an instance of JavaScript's native Error object.
+      - reset: This is a function that can be called to reset the error boundary and attempt to re-render the component tree.
+      - after including error.tsx: ![img_20.png](img_20.png)
