@@ -370,4 +370,9 @@ export async function createInvoice(formData) {
   - from: ![img_17.png](img_17.png)
   - to: ![img_18.png](img_18.png)
   - notice how it is pre-populated with existing invoice data. Refer [page.tsx](app/dashboard/invoices/[id]/edit/page.tsx) and all the components used inside it.
-  - 
+
+
+## chapter 12: Handling Errors
+- Check out the newly added try catch block in [actions.ts](app/lib/actions.ts). This will handle errors that occur during the creation, and updating of invoices.
+- How do we handle errors in server actions? ![img_19.png](img_19.png)
+  - I created this error manually to show how we can use error.tsx. 
