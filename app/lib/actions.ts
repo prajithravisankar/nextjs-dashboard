@@ -83,7 +83,7 @@ export async function updateInvoice(id: string, formData: FormData) {
 }
 
 export async function deleteInvoice(id: string) {
-    throw new Error('Error failed to delete invoice'); // should be deleted after testing error handling in UI
+    // throw new Error('Error failed to delete invoice'); // should be deleted after testing error handling in UI
 
     await sql`DELETE FROM invoices WHERE id = ${id}`;
     revalidatePath('/dashboard/invoices');
